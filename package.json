@@ -1,0 +1,29 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "build": "yarn build:clean && yarn build:lib && yarn copy:files",
+    "build:lib": "tsc --project tsconfig.build.json",
+    "build:clean": "ts-node ./scripts/clean-build",
+    "copy:files": "lerna run copy:files",
+    "prepublish": "yarn build"
+  },
+  "dependencies": {
+    "@next-inversify/core": "file:packages/core",
+    "@next-inversify/query": "file:packages/query"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.2.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.12.8",
+    "eslint": "^9.2.0",
+    "fs-extra": "^11.2.0",
+    "globals": "^15.1.0",
+    "lerna": "^8.1.2",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0"
+  }
+}
