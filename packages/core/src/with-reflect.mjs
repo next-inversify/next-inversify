@@ -1,4 +1,4 @@
-export const withReflect = (config: any) => {
+export const withReflect = (config) => {
   const entry = async () => {
     const _entry = await config.entry();
 

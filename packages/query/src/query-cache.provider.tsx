@@ -1,13 +1,12 @@
-import { Container } from 'inversify';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useId, useRef, useState } from 'react';
 
 import { isServer } from '@next-inversify/core/utils/is-server';
 import { htmlEscapeJsonString } from './htmlescape';
 import { QueryLoader, QueryResult } from './query.loader';
+import { useService } from '@next-inversify/core';
 
 type QueryCacheProviderProps = {
-  container: Container;
   children: React.ReactNode;
 };
 
@@ -25,7 +24,8 @@ const unboxCache = (cache: QueryResult[]): Record<string, QueryResult> => {
 };
 
 export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
-  const queryLoader = props.container.get(QueryLoader);
+  const queryLoader = useService(QueryLoader);
+
   const [flushedKeys] = useState(new Set<string>());
 
   const id = `__L${useId()}`;

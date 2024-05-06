@@ -1,3 +1,4 @@
+import 'reflect-metadata/lite';
 import { Container } from 'inversify';
 
 import { isServer } from './utils/is-server';
