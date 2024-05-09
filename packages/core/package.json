@@ -1,6 +1,6 @@
 {
   "name": "@next-inversify/core",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
@@ -12,14 +12,14 @@
   "main": "./index.js",
   "typings": "./index.d.ts",
   "devDependencies": {
+    "@types/react": "^18",
     "inversify": "^6.0.2",
-    "react": "^18",
-    "@types/react": "^18"
+    "react": "^18"
   },
   "peerDependencies": {
+    "@types/react": "^18",
     "inversify": "^6.0.2",
-    "react": "^18",
-    "@types/react": "^18"
+    "react": "^18"
   },
   "publishConfig": {
     "access": "public"
