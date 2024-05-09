@@ -15,6 +15,9 @@ importers:
         specifier: file:packages/query
         version: file:packages/query(@types/react@18.3.1)(inversify@6.0.2)(mobx@6.12.3)(next@14.2.3)(react@18.3.1)
     devDependencies:
+      '@atao60/fse-cli':
+        specifier: ^0.1.9
+        version: 0.1.9
       '@eslint/js':
         specifier: ^9.2.0
         version: 9.2.0
@@ -55,13 +58,13 @@ importers:
   packages/core:
     devDependencies:
       '@types/react':
-        specifier: ^18.3.1
+        specifier: ^18
         version: 18.3.1
       inversify:
         specifier: ^6.0.2
         version: 6.0.2
       react:
-        specifier: ^18.3.1
+        specifier: ^18
         version: 18.3.1
 
   packages/next-example:
@@ -136,6 +139,24 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+    dev: true
+
+  /@atao60/fse-cli@0.1.9:
+    resolution: {integrity: sha512-ga+hz6CUNOvvA63EMs5gucg6IHUuQSq3noL+Y479Om57FXsLEqBpl96vdLj1QnBEK6Z8mrzwZ/vXovOK8OQZ1g==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0, npm: '>=6.14.11'}
+    hasBin: true
+    dependencies:
+      '@babel/runtime': 7.24.5
+      arg: 5.0.2
+      chalk: 4.1.2
+      core-js: 3.37.0
+      fs-extra: 11.2.0
+      graceful-fs: 4.2.11
+      inquirer: 8.2.6
+      regenerator-runtime: 0.13.11
+      source-map-support: 0.5.21
+      terminal-link: 3.0.0
+      tslib: 2.6.2
     dev: true
 
   /@babel/code-frame@7.24.2:
@@ -1449,6 +1470,13 @@ packages:
       type-fest: 0.21.3
     dev: true
 
+  /ansi-escapes@5.0.0:
+    resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
+    engines: {node: '>=12'}
+    dependencies:
+      type-fest: 1.4.0
+    dev: true
+
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -2108,6 +2136,11 @@ packages:
       git-raw-commits: 3.0.0
       git-semver-tags: 5.0.1
       meow: 8.1.2
+    dev: true
+
+  /core-js@3.37.0:
+    resolution: {integrity: sha512-fu5vHevQ8ZG4og+LXug8ulUtVxjOcEYvifJr7L5Bfq9GOztVqsKd9/59hUk2ZSbCrS3BqUr3EpaYGIYzq7g3Ug==}
+    requiresBuild: true
     dev: true
 
   /core-util-is@1.0.3:
@@ -5654,6 +5687,10 @@ packages:
       which-builtin-type: 1.1.3
     dev: true
 
+  /regenerator-runtime@0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: true
+
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
     dev: true
@@ -5959,6 +5996,13 @@ packages:
     resolution: {integrity: sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==}
     engines: {node: '>=0.10.0'}
 
+  /source-map-support@0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+    dev: true
+
   /source-map@0.5.7:
     resolution: {integrity: sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==}
     engines: {node: '>=0.10.0'}
@@ -6199,6 +6243,14 @@ packages:
       has-flag: 4.0.0
     dev: true
 
+  /supports-hyperlinks@2.3.0:
+    resolution: {integrity: sha512-RpsAZlpWcDwOPQA22aCH4J0t7L8JmAvsCxfOSEwm7cQs3LshN36QaTkwd70DnBOXDWGssw2eUoc8CaRWT0XunA==}
+    engines: {node: '>=8'}
+    dependencies:
+      has-flag: 4.0.0
+      supports-color: 7.2.0
+    dev: true
+
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
@@ -6266,6 +6318,14 @@ packages:
   /temp-dir@1.0.0:
     resolution: {integrity: sha512-xZFXEGbG7SNC3itwBzI3RYjq/cEhBkx2hJuKGIUOcEULmkQExXiHat2z/qkISYsuR+IKumhEfKKbV5qXmhICFQ==}
     engines: {node: '>=4'}
+    dev: true
+
+  /terminal-link@3.0.0:
+    resolution: {integrity: sha512-flFL3m4wuixmf6IfhFJd1YPiLiMuxEc8uHRM1buzIeZPm22Au2pDqBJQgdo7n1WfPU1ONFGv7YDwpFBmHGF6lg==}
+    engines: {node: '>=12'}
+    dependencies:
+      ansi-escapes: 5.0.0
+      supports-hyperlinks: 2.3.0
     dev: true
 
   /text-extensions@1.9.0:
@@ -6456,6 +6516,11 @@ packages:
   /type-fest@0.8.1:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
+    dev: true
+
+  /type-fest@1.4.0:
+    resolution: {integrity: sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==}
+    engines: {node: '>=10'}
     dev: true
 
   /typed-array-buffer@1.0.2:
@@ -6855,9 +6920,9 @@ packages:
     id: file:packages/core
     name: '@next-inversify/core'
     peerDependencies:
-      '@types/react': ^18.3.1
+      '@types/react': ^18
       inversify: ^6.0.2
-      react: ^18.3.1
+      react: ^18
     dependencies:
       '@types/react': 18.3.1
       inversify: 6.0.2

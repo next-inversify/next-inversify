@@ -9,8 +9,10 @@ type ProvidersProps = Readonly<{
 }>;
 
 export function Providers(props: ProvidersProps) {
+  const container = appContainer();
+
   return (
-    <IOCProvider container={appContainer()}>
+    <IOCProvider container={container}>
       <QueryCacheProvider>{props.children}</QueryCacheProvider>
     </IOCProvider>
   );

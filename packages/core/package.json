@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "",
   "scripts": {
-    "copy:files": "ts-node ../../scripts/copy-files",
+    "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
     "prepublish": "ts-node ../../scripts/copy-package-json"
   },
   "keywords": [],
@@ -12,14 +12,14 @@
   "main": "./index.js",
   "typings": "./index.d.ts",
   "devDependencies": {
-    "@types/react": "^18.3.1",
     "inversify": "^6.0.2",
-    "react": "^18.3.1"
+    "react": "^18",
+    "@types/react": "^18"
   },
   "peerDependencies": {
-    "@types/react": "^18.3.1",
     "inversify": "^6.0.2",
-    "react": "^18.3.1"
+    "react": "^18",
+    "@types/react": "^18"
   },
   "publishConfig": {
     "access": "public"
