@@ -1,0 +1,31 @@
+{
+  "name": "@next-inversify/gql",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
+    "prepublish": "ts-node ../../scripts/copy-package-json"
+  },
+  "keywords": [],
+  "author": "alexhtech <olefirenk@gmail.com>",
+  "license": "MIT",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "devDependencies": {
+    "graphql": "^16.8.1",
+    "graphql-request": "^7.0.1",
+    "inversify": "^6.0.2"
+  },
+  "peerDependencies": {
+    "graphql": "^16.8.1",
+    "graphql-request": "^7.0.1",
+    "inversify": "^6.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "optionalDependencies": {
+    "graphql-ws": "^5.16.0",
+    "rxjs": "^7.8.1"
+  }
+}
