@@ -52,7 +52,7 @@ export class GqlLoader {
         return this.queryLoader.querySuspense({
           key: name,
           fetcher: () => this.gqlClient.query(document, ...rest),
-        });
+        }).data;
       },
       variables,
       headers,
