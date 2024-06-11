@@ -1,6 +1,6 @@
 import { interfaces } from 'inversify';
 
-import { Callback } from '../utils';
+import { Callback } from './utils';
 import { IOCDescriptor } from './ioc.descriptor';
 
 export const initIOC = (

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useIOCContext } from './ioc.context';
-import { IOCDescriptor } from './ioc';
+import { IOCDescriptor } from '../ioc.descriptor';
 
 export const useIOC = (...descriptors: IOCDescriptor[]): void => {
   const { loadDescriptors, IOCTimers, unloadDescriptors } = useIOCContext();

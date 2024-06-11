@@ -1,6 +1,7 @@
 import { Container } from 'inversify';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
-import { IOCDescriptor, createIOCState } from './ioc';
+import { IOCDescriptor } from '../ioc.descriptor';
+import { createIOCState } from '../ioc.state';
 
 type IOCProviderState = {
   container: Container;

@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { Observable, filter, map, retry, share } from 'rxjs';
 
 import { ScalarExchangeResult } from './custom-scalar.exchange';
-import { Disposable } from '@next-inversify/core';
+import { Disposable } from '@next-inversify/core/utils';
 import { Logger } from './logger';
 import { RetryStrategy } from './retry-strategy';
 

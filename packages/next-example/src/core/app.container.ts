@@ -1,6 +1,6 @@
 import { Container } from 'inversify';
 
-import { getContainer, initIOC } from '@next-inversify/core/ioc';
+import { getContainer, initIOC } from '../../../core/src';
 import { queryModule } from '@next-inversify/query/query.module';
 
 export const appContainer = getContainer(() => {
