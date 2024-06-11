@@ -1,17 +1,13 @@
-import { ContainerModule, interfaces } from 'inversify';
+import { interfaces } from 'inversify';
 
-import { DisposerLike } from './utils/disposable';
-
-export type IOCDescriptor = {
-  autoInstantiate?: readonly interfaces.ServiceIdentifier<unknown>[];
-  module: ContainerModule;
-};
+import { Callback } from '../utils';
+import { IOCDescriptor } from './ioc.descriptor';
 
 export const initIOC = (
   container: interfaces.Container,
   descriptors: IOCDescriptor[],
   instantiate = true,
-): DisposerLike => {
+): Callback<void> => {
   const modules = descriptors.map(({ module }) => module);
 
   container.load(...modules);
