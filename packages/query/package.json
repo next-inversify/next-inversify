@@ -1,6 +1,6 @@
 {
   "name": "@next-inversify/query",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files",
