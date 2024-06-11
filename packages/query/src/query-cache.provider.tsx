@@ -4,7 +4,7 @@ import { useId, useRef, useState } from 'react';
 import { isServer } from '@next-inversify/core/utils/is-server';
 import { htmlEscapeJsonString } from './htmlescape';
 import { QueryLoader, QueryResult } from './query.loader';
-import { useService } from '@next-inversify/core';
+import { useService } from '@next-inversify/core/context';
 
 type QueryCacheProviderProps = {
   children: React.ReactNode;
