@@ -1,6 +1,6 @@
 import { Container } from 'inversify';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
-import { IOCDescriptor } from './ioc';
+import { IOCDescriptor, createIOCState } from './ioc';
 
 type IOCProviderState = {
   container: Container;
@@ -21,7 +21,7 @@ type IOCProviderProps = PropsWithChildren<{
 export const IOCProvider = (props: IOCProviderProps) => {
   const { children, container, state } = props;
 
-  const [iocState] = useState(() => state ?? createIOCProviderState(container));
+  const [iocState] = useState(() => state ?? createIOCState(container));
 
   return <IOCContext.Provider value={iocState}>{children}</IOCContext.Provider>;
 };
