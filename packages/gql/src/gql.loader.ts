@@ -26,7 +26,7 @@ export class GqlLoader {
         }
 
         const { data } = await this.queryLoader.query({
-          key: name,
+          key: `${name}:${JSON.stringify(variables || {})}`,
           fetcher: () => this.gqlClient.query(document, ...rest),
         });
 
@@ -50,7 +50,7 @@ export class GqlLoader {
         }
 
         return this.queryLoader.querySuspense({
-          key: name,
+          key: `${name}:${JSON.stringify(variables || {})}`,
           fetcher: () => this.gqlClient.query(document, ...rest),
         }).data;
       },
