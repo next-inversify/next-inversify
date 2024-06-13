@@ -1,6 +1,6 @@
 {
   "name": "@next-inversify/gql",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.12",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
