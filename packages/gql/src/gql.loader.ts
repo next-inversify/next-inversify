@@ -57,4 +57,8 @@ export class GqlLoader {
 
     return query.fetch();
   };
+
+  readonly getQuery = <Q extends QueryFn>(fn: Q, params?: GqlQueryParams<Q>): Query<ExtractResult<Q>> => {
+    return createQuery(fn, params, this.queryStore, this.gqlClient);
+  };
 }
