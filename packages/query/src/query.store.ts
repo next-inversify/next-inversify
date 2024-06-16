@@ -5,7 +5,7 @@ import { QueryState } from './query.state';
 
 @injectable()
 export class QueryStore {
-  private prefetched = new Map<string, QueryState>();
+  private prefetched = new Map<string, QueryState<any>>();
 
   private queries = new Map<string, Query<any>>();
 

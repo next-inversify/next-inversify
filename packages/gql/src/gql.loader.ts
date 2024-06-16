@@ -31,7 +31,7 @@ export const createQuery = <Q extends QueryFn>(
 
       const query = queryStore.getQuery({
         key: [name, variables],
-        fn: () => gqlClient.query(document, ...rest),
+        fn: () => gqlClient.query(document, ...rest) as Promise<ExtractResult<Q>>,
         ...restParams,
       });
 
