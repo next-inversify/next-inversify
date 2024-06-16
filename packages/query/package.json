@@ -19,11 +19,11 @@
     "react": "^18.3.1"
   },
   "peerDependencies": {
-    "@types/react": "^18.3.1",
-    "inversify": "^6.0.2",
-    "mobx": "^6.12.3",
-    "next": "^14.2.3",
-    "react": "^18.3.1"
+    "@types/react": "^18",
+    "inversify": "^6",
+    "mobx": "^6",
+    "next": "^14",
+    "react": "^18"
   },
   "publishConfig": {
     "access": "public"

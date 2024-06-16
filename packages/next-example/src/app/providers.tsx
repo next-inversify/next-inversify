@@ -1,7 +1,7 @@
 'use client';
 
 import { appContainer } from '@/core/app.container';
-import { IOCProvider } from '@next-inversify/core';
+import { IOCProvider } from '@next-inversify/core/context';
 import { QueryCacheProvider } from '@next-inversify/query/query-cache.provider';
 
 type ProvidersProps = Readonly<{

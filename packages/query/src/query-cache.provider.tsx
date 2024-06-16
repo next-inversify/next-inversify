@@ -1,30 +1,31 @@
+import { useService } from '@next-inversify/core/context';
+import { isServer } from '@next-inversify/core/utils/is-server';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useId, useRef, useState } from 'react';
 
-import { isServer } from '@next-inversify/core/utils/is-server';
 import { htmlEscapeJsonString } from './htmlescape';
-import { QueryLoader, QueryResult } from './query.loader';
-import { useService } from '@next-inversify/core/context';
+import { QueryState } from './query.state';
+import { QueryStore } from './query.store';
 
 type QueryCacheProviderProps = {
   children: React.ReactNode;
 };
 
-type PreloadedState = [initialized: boolean, ...data: QueryResult[][]];
+type PreloadedState = [initialized: boolean, ...data: QueryState[][]];
 
-const unboxCache = (cache: QueryResult[]): Record<string, QueryResult> => {
+const unboxCache = (cache: QueryState[]): Record<string, QueryState> => {
   return cache.reduce(
     (acc, query) => {
       acc[query.key] = query;
 
       return acc;
     },
-    {} as Record<string, QueryResult>,
+    {} as Record<string, QueryState>,
   );
 };
 
 export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
-  const queryLoader = useService(QueryLoader);
+  const queryLoader = useService(QueryStore);
 
   const [flushedKeys] = useState(new Set<string>());
 
@@ -36,7 +37,7 @@ export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
   useServerInsertedHTML(() => {
     const cache = queryLoader.dehydrate();
 
-    const data: QueryResult[] = [];
+    const data: QueryState[] = [];
 
     for (const key in cache) {
       if (!flushedKeys.has(key) && (cache[key].isLoaded || cache[key].error)) {

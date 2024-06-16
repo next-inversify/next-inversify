@@ -1,21 +1,12 @@
+import { Query } from '@next-inversify/query/src/query';
 import { useQuery } from '@next-inversify/query/use-query';
 import { observer } from 'mobx-react-lite';
 
-export const EmbededQuery = observer(() => {
+export const EmbededLazyQuery = observer(() => {
   const catfactQuery = useQuery({
-    key: ['fact-embeded'],
-    fn: async () => {
-      const result = await fetch('https://catfact.ninja/fact').catch((error) => ({
-        ok: false,
-        statusText: error.message,
-      }));
-
-      if (!result.ok) throw new Error(result.statusText);
-
-      const json: { fact: string } = await (result as Response).json();
-
-      return json;
-    },
+    key: ['fact-embeded-lazy'],
+    fn: () => fetch('https://catfact.ninja/fact').then<{ fact: string }>((res) => res.json()),
+    lazy: true,
   });
 
   return (
@@ -29,7 +20,10 @@ export const EmbededQuery = observer(() => {
           refetch
         </button>
       </div>
-      <div className="text-sm">{catfactQuery.data.fact}</div>
+      <div className="text-sm mt-2">{catfactQuery.data?.fact}</div>
+      <div className="text-sm mt-2">
+        <pre>{JSON.stringify(Query.dehydrate(catfactQuery), null, 2)}</pre>
+      </div>
     </div>
   );
 });

@@ -25,6 +25,8 @@
       "@next-inversify/core/*": ["../../packages/core/src/*"],
       "@next-inversify/query": ["../../packages/query/src"],
       "@next-inversify/query/*": ["../../packages/query/src/*"],
+      "@next-inversify/gql": ["../../packages/gql/src"],
+      "@next-inversify/gql/*": ["../../packages/gql/src/*"],
       "@/*": ["./src/*"]
     }
   },

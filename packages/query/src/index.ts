@@ -1,2 +1,2 @@
-export * from './query.loader';
+export * from './query.store';
 export * from './query.module';
