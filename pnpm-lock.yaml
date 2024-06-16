@@ -92,7 +92,7 @@ importers:
         version: link:../core
       '@next-inversify/query':
         specifier: ^1.0.0-alpha.1
-        version: link:../query
+        version: 1.0.0-y.0(@types/react@18.3.1)(inversify@6.0.2)(mobx@6.12.3)(next@14.2.3)(react@18.3.1)
       graphql-request:
         specifier: ^7.0.1
         version: 7.0.1(graphql@16.8.1)
@@ -656,6 +656,23 @@ packages:
       { integrity: sha512-p6ChnEZDGjg9PYPec9BK6Yp5/DdSrYQvXTBAtgrnqX6N36cZy37ql1c8Tc5LclfIYBNG7EZp8NBcRTYJwyi84g== }
     dependencies:
       ts-toolbelt: 9.6.0
+
+  /@next-inversify/query@1.0.0-y.0(@types/react@18.3.1)(inversify@6.0.2)(mobx@6.12.3)(next@14.2.3)(react@18.3.1):
+    resolution:
+      { integrity: sha512-YYSGV44tJ1oD8upqm8fz9rF7g2Skm6kWY/ScXgs+V5nT8EPrJsm5NTfmWUmP2XmsaUPVr+nGL3r2/ARFalgYjA== }
+    peerDependencies:
+      '@types/react': ^18
+      inversify: ^6
+      mobx: ^6
+      next: ^14
+      react: ^18
+    dependencies:
+      '@types/react': 18.3.1
+      inversify: 6.0.2
+      mobx: 6.12.3
+      next: 14.2.3(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
+    dev: false
 
   /@next/env@14.2.3:
     resolution:
