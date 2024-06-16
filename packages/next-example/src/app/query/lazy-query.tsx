@@ -1,4 +1,4 @@
-import { Query } from '@next-inversify/query/src/query';
+import { Query } from '@next-inversify/query/query';
 import { useQuery } from '@next-inversify/query/use-query';
 import { observer } from 'mobx-react-lite';
 

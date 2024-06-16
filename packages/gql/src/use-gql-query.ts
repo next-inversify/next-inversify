@@ -2,8 +2,8 @@ import { useService } from '@next-inversify/core/context';
 import { Query } from '@next-inversify/query/query';
 import { QueryStore } from '@next-inversify/query/query.store';
 import { QueryCompleted } from '@next-inversify/query/query.types';
+import { UseBaseQueryParams, useBaseQuery } from '@next-inversify/query/use-base-query';
 
-import { UseBaseQueryParams, useBaseQuery } from '../../query/src/use-base-query';
 import { GqlClient } from './gql.client';
 import { GqlQueryParams, createQuery } from './gql.loader';
 import { ExtractResult, QueryFn } from './query-types';
