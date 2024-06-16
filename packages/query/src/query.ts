@@ -7,6 +7,8 @@ export type QueryParams<TData> = {
   key: any[];
   fn: () => Promise<TData>;
   staleTimeMs?: number;
+  onFetchSuccess?: (data: TData) => void;
+  onFetchError?: (query: Query<TData>) => void;
 };
 
 export class Query<TData> implements QueryState {
@@ -49,6 +51,12 @@ export class Query<TData> implements QueryState {
     return this.loadingPromise;
   };
 
+  @action
+  readonly update = (data: TData) => {
+    this.data = data;
+    this.isLoaded = true;
+  };
+
   private load = async () => {
     this.setLoading(true);
 
@@ -77,6 +85,10 @@ export class Query<TData> implements QueryState {
     this.isLoaded = true;
     this.error = undefined;
     this.staleAt = Date.now() + (this.params.staleTimeMs || 1000);
+
+    if (this.params.onFetchSuccess) {
+      this.params.onFetchSuccess(data);
+    }
   };
 
   @action
@@ -84,6 +96,10 @@ export class Query<TData> implements QueryState {
     this.error = error;
     this.isLoading = false;
     this.isLoaded = false;
+
+    if (this.params.onFetchError) {
+      this.params.onFetchError(this);
+    }
   };
 
   @action

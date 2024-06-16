@@ -22,6 +22,9 @@ export default observer(function QueryPage() {
 
       return json;
     },
+    onFetchSuccess: (data) => {
+      console.log('onFetchSuccess', data);
+    },
   });
 
   return (
