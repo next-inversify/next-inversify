@@ -1,2 +1,2 @@
-export * from './query.store';
+export * from './query.cache';
 export * from './query.module';

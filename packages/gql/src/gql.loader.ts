@@ -1,24 +1,37 @@
-import { QueryStore } from '@next-inversify/query';
-import { Query, QueryParams } from '@next-inversify/query/query';
-import { QueryCompleted } from '@next-inversify/query/query.types';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { QueryLoader, QueryLoaderParams } from '@next-inversify/query/query-loader';
+import { QueryCache } from '@next-inversify/query/query.cache';
 import { getOperationAST } from 'graphql';
-import { injectable } from 'inversify';
 
 import { GqlClient } from './gql.client';
 import { ExtractResult, ExtractVariables, QueryFn } from './query-types';
 
-export type GqlQueryParams<Q> = Omit<QueryParams<ExtractResult<Q>>, 'fn' | 'key'> & {
+export type GqlQueryParams<Q> = Omit<QueryLoaderParams<ExtractResult<Q>>, 'fn' | 'key'> & {
   key?: any[];
   variables?: ExtractVariables<Q>;
   headers?: HeadersInit;
 };
 
-export const createQuery = <Q extends QueryFn>(
+export const getKey = <Q extends QueryFn>(queryFn: Q, params: GqlQueryParams<Q> | undefined): any[] => {
+  const { key, variables } = params || {};
+
+  return queryFn((document) => {
+    const name = getOperationAST(document)?.name?.value;
+
+    if (!name) {
+      throw new Error('Query must have a name');
+    }
+
+    return key || [name, variables];
+  }, variables);
+};
+
+export const createQueryLoader = <Q extends QueryFn>(
   queryFn: Q,
   params: GqlQueryParams<Q> | undefined,
-  queryStore: QueryStore,
+  queryCache: QueryCache,
   gqlClient: GqlClient,
-): Query<ExtractResult<Q>> => {
+): QueryLoader<ExtractResult<Q>> => {
   const { key, variables, headers, ...restParams } = params || {};
 
   return queryFn(
@@ -29,36 +42,13 @@ export const createQuery = <Q extends QueryFn>(
         throw new Error('Query must have a name');
       }
 
-      const query = queryStore.getQuery({
-        key: [name, variables],
+      return new QueryLoader(queryCache, {
+        key: key || getKey(queryFn, params),
         fn: () => gqlClient.query(document, ...rest) as Promise<ExtractResult<Q>>,
         ...restParams,
       });
-
-      return query;
     },
     variables,
     headers,
   );
 };
-
-@injectable()
-export class GqlLoader {
-  constructor(
-    private readonly gqlClient: GqlClient,
-    private readonly queryStore: QueryStore,
-  ) {}
-
-  readonly query = async <Q extends QueryFn>(
-    fn: Q,
-    params?: GqlQueryParams<Q>,
-  ): Promise<QueryCompleted<ExtractResult<Q>>> => {
-    const query = createQuery(fn, params, this.queryStore, this.gqlClient);
-
-    return query.fetch();
-  };
-
-  readonly getQuery = <Q extends QueryFn>(fn: Q, params?: GqlQueryParams<Q>): Query<ExtractResult<Q>> => {
-    return createQuery(fn, params, this.queryStore, this.gqlClient);
-  };
-}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Query } from './query';
+import { QueryLoader } from './query-loader';
 import { QueryCompleted } from './query.types';
 
 export type UseBaseQueryParams = {
@@ -13,30 +13,30 @@ export type UseBaseQueryLazyParams = Omit<UseBaseQueryParams, 'lazy'> & {
 };
 
 export function useBaseQuery<TData>(
-  query: Query<TData>,
+  queryLoader: QueryLoader<TData>,
   params: UseBaseQueryParams,
-): Query<TData> | QueryCompleted<TData> {
+): QueryLoader<TData> | QueryCompleted<TData> {
   const { suspense = true, lazy = false } = params;
 
   if (suspense && !lazy) {
-    if (query.error) {
-      throw query.error;
+    if (queryLoader.error) {
+      throw queryLoader.error;
     }
 
-    if (!query.isLoaded) {
-      throw query.fetch();
+    if (!queryLoader.isLoaded) {
+      throw queryLoader.fetch();
     }
   }
 
   useEffect(() => {
-    if (!lazy && query.staleAt && query.staleAt < Date.now()) {
-      query.fetch();
+    if (!lazy && queryLoader.staleAt && queryLoader.staleAt < Date.now()) {
+      queryLoader.fetch();
     }
 
     if (!suspense && !lazy) {
-      query.fetch();
+      queryLoader.fetch();
     }
-  }, [query.key]);
+  }, [queryLoader.key]);
 
-  return query;
+  return queryLoader;
 }

@@ -22,7 +22,7 @@ export default observer(function QueryPage() {
 
       return json;
     },
-    onFetchSuccess: (data) => {
+    onSuccess: (data) => {
       console.log('onFetchSuccess', data);
     },
   });

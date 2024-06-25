@@ -1,11 +1,12 @@
 import { useService } from '@next-inversify/core/context';
-import { Query } from '@next-inversify/query/query';
-import { QueryStore } from '@next-inversify/query/query.store';
+import { QueryLoader } from '@next-inversify/query/query-loader';
+import { QueryCache } from '@next-inversify/query/query.cache';
 import { QueryCompleted } from '@next-inversify/query/query.types';
 import { UseBaseQueryParams, useBaseQuery } from '@next-inversify/query/use-base-query';
+import { useState } from 'react';
 
 import { GqlClient } from './gql.client';
-import { GqlQueryParams, createQuery } from './gql.loader';
+import { GqlQueryParams, createQueryLoader } from './gql.loader';
 import { ExtractResult, QueryFn } from './query-types';
 
 type UseGqlQueryParams<TData> = UseBaseQueryParams & GqlQueryParams<QueryFn<TData>>;
@@ -13,11 +14,11 @@ type UseGqlQueryParams<TData> = UseBaseQueryParams & GqlQueryParams<QueryFn<TDat
 export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
   params: UseGqlQueryParams<ExtractResult<Q>> & { suspense: false },
-): Query<ExtractResult<Q>>;
+): QueryLoader<ExtractResult<Q>>;
 export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
   params: UseGqlQueryParams<ExtractResult<Q>> & { lazy: true },
-): Query<ExtractResult<Q>>;
+): QueryLoader<ExtractResult<Q>>;
 export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
   params?: UseGqlQueryParams<ExtractResult<Q>>,
@@ -27,9 +28,9 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<
   const { suspense = true, lazy = false, ...rest } = params;
 
   const gqlClient = useService(GqlClient);
-  const queryStore = useService(QueryStore);
+  const queryCache = useService(QueryCache);
 
-  const query = createQuery(fn, rest, queryStore, gqlClient);
+  const [loader] = useState(() => createQueryLoader(fn, rest, queryCache, gqlClient));
 
-  return useBaseQuery(query, { suspense, lazy });
+  return useBaseQuery(loader, { suspense, lazy });
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ASTNode,
   GraphQLOutputType,
@@ -45,6 +46,7 @@ function traverseAncestors(
 ): void {
   let currentAstNode = ancestorAstNodes[0];
   astPath.forEach((segment) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     currentAstNode = currentAstNode[segment];
     if (isNode(currentAstNode)) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DocumentNode } from 'graphql';
 import type { Observable } from 'rxjs';
 

@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useService } from '@next-inversify/core/context';
 import { isServer } from '@next-inversify/core/utils/is-server';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useId, useRef, useState } from 'react';
 
 import { htmlEscapeJsonString } from './htmlescape';
+import { QueryCache } from './query.cache';
 import { QueryState } from './query.state';
-import { QueryStore } from './query.store';
 
 type QueryCacheProviderProps = {
   children: React.ReactNode;
@@ -25,7 +26,7 @@ const unboxCache = (cache: QueryState[]): Record<string, QueryState> => {
 };
 
 export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
-  const queryLoader = useService(QueryStore);
+  const queryLoader = useService(QueryCache);
 
   const [flushedKeys] = useState(new Set<string>());
 
@@ -81,6 +82,7 @@ export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
       preloadedState.push = (...args) => {
         const count = push(...args);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_, ...data] = preloadedState;
 
         queryLoader.hydrate(unboxCache(data.flat()));

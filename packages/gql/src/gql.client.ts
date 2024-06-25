@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DocumentNode, getOperationAST, print } from 'graphql';
 import { BatchRequestDocument, GraphQLClient, Variables } from 'graphql-request';
 import { injectable } from 'inversify';
