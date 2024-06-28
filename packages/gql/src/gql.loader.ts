@@ -6,7 +6,7 @@ import { getOperationAST } from 'graphql';
 import { GqlClient } from './gql.client';
 import { ExtractResult, ExtractVariables, QueryFn } from './query-types';
 
-export type GqlQueryParams<Q> = Omit<QueryLoaderParams<ExtractResult<Q>>, 'fn' | 'key'> & {
+export type GqlQueryParams<Q extends QueryFn> = Omit<QueryLoaderParams<ExtractResult<Q>>, 'fn' | 'key'> & {
   key?: any[];
   variables?: ExtractVariables<Q>;
   headers?: HeadersInit;

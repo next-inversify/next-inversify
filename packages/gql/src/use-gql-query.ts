@@ -9,22 +9,19 @@ import { GqlClient } from './gql.client';
 import { GqlQueryParams, createQueryLoader } from './gql.loader';
 import { ExtractResult, QueryFn } from './query-types';
 
-type UseGqlQueryParams<TData> = UseBaseQueryParams & GqlQueryParams<QueryFn<TData>>;
+type UseGqlQueryParams<Q extends QueryFn> = UseBaseQueryParams & GqlQueryParams<Q>;
 
 export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
-  params: UseGqlQueryParams<ExtractResult<Q>> & { suspense: false },
+  params: UseGqlQueryParams<Q> & { suspense: false },
 ): QueryLoader<ExtractResult<Q>>;
 export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
-  params: UseGqlQueryParams<ExtractResult<Q>> & { lazy: true },
+  params: UseGqlQueryParams<Q> & { lazy: true },
 ): QueryLoader<ExtractResult<Q>>;
-export function useGqlQuery<Q extends QueryFn>(
-  fn: Q,
-  params?: UseGqlQueryParams<ExtractResult<Q>>,
-): QueryCompleted<ExtractResult<Q>>;
+export function useGqlQuery<Q extends QueryFn>(fn: Q, params?: UseGqlQueryParams<Q>): QueryCompleted<ExtractResult<Q>>;
 
-export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<ExtractResult<Q>> = {}) {
+export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<Q> = {}) {
   const { suspense = true, lazy = false, ...rest } = params;
 
   const gqlClient = useService(GqlClient);
