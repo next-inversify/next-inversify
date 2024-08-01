@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { QueryLoader } from './query-loader';
-import { QueryCompleted } from './query.types';
+import { CompletedQuery } from './query.types';
 
 export type UseBaseQueryParams = {
   suspense?: boolean;
@@ -15,7 +15,7 @@ export type UseBaseQueryLazyParams = Omit<UseBaseQueryParams, 'lazy'> & {
 export function useBaseQuery<TData>(
   queryLoader: QueryLoader<TData>,
   params: UseBaseQueryParams,
-): QueryLoader<TData> | QueryCompleted<TData> {
+): QueryLoader<TData> | CompletedQuery<TData> {
   const { suspense = true, lazy = false } = params;
 
   if (suspense && !lazy) {

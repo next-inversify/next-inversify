@@ -1,7 +1,7 @@
 import { useService } from '@next-inversify/core/context';
 import { QueryLoader } from '@next-inversify/query/query-loader';
 import { QueryCache } from '@next-inversify/query/query.cache';
-import { QueryCompleted } from '@next-inversify/query/query.types';
+import { CompletedQuery } from '@next-inversify/query/query.types';
 import { UseBaseQueryParams, useBaseQuery } from '@next-inversify/query/use-base-query';
 import { useState } from 'react';
 
@@ -19,7 +19,7 @@ export function useGqlQuery<Q extends QueryFn>(
   fn: Q,
   params: UseGqlQueryParams<Q> & { lazy: true },
 ): QueryLoader<ExtractResult<Q>>;
-export function useGqlQuery<Q extends QueryFn>(fn: Q, params?: UseGqlQueryParams<Q>): QueryCompleted<ExtractResult<Q>>;
+export function useGqlQuery<Q extends QueryFn>(fn: Q, params?: UseGqlQueryParams<Q>): CompletedQuery<ExtractResult<Q>>;
 
 export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<Q> = {}) {
   const { suspense = true, lazy = false, ...rest } = params;

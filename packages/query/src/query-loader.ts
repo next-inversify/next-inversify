@@ -4,9 +4,10 @@ import { action, computed, makeObservable } from 'mobx';
 import { Query } from './query';
 import { QueryCache } from './query.cache';
 import { QueryState } from './query.state';
+import { QueryKey } from './query.types';
 
 export type QueryLoaderParams<TData> = {
-  key: any[];
+  key: QueryKey | QueryKey[];
   fn: () => Promise<TData>;
   staleMs?: number;
   onSuccess?: (data: TData) => void;

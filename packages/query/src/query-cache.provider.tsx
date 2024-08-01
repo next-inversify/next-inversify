@@ -7,9 +7,11 @@ import { useId, useRef, useState } from 'react';
 import { htmlEscapeJsonString } from './htmlescape';
 import { QueryCache } from './query.cache';
 import { QueryState } from './query.state';
+import { useHydrateCache } from './use-hydrate-cache.hook';
 
 type QueryCacheProviderProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  cacheData?: Record<string, QueryState>;
 };
 
 type PreloadedState = [initialized: boolean, ...data: QueryState[][]];
@@ -26,7 +28,9 @@ const unboxCache = (cache: QueryState[]): Record<string, QueryState> => {
 };
 
 export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
-  const queryLoader = useService(QueryCache);
+  useHydrateCache({ data: props.cacheData });
+
+  const queryCache = useService(QueryCache);
 
   const [flushedKeys] = useState(new Set<string>());
 
@@ -36,7 +40,7 @@ export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
   const count = useRef(0);
 
   useServerInsertedHTML(() => {
-    const cache = queryLoader.dehydrate();
+    const cache = queryCache.dehydrate();
 
     const data: QueryState[] = [];
 
@@ -75,7 +79,7 @@ export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
     if (!initialized && data.length > 0) {
       preloadedState[0] = true;
 
-      queryLoader.hydrate(unboxCache(data.flat()));
+      queryCache.hydrate(unboxCache(data.flat()));
 
       const push = preloadedState.push.bind(preloadedState);
 
@@ -85,12 +89,12 @@ export const QueryCacheProvider = (props: QueryCacheProviderProps) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_, ...data] = preloadedState;
 
-        queryLoader.hydrate(unboxCache(data.flat()));
+        queryCache.hydrate(unboxCache(data.flat()));
 
         return count;
       };
     }
   }
 
-  return props.children;
+  return props.children || null;
 };

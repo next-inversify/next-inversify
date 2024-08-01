@@ -4,6 +4,7 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { Query } from './query';
 import { QueryState } from './query.state';
+import { QueryKey } from './query.types';
 
 @injectable()
 export class QueryCache {
@@ -14,8 +15,10 @@ export class QueryCache {
     makeObservable(this);
   }
 
-  get = <TData>(key: any[]): Query<TData> => {
-    const stringKey = QueryCache.stringifyKey(key);
+  get<TData>(key: QueryKey): Query<TData>;
+  get<TData>(key: QueryKey[]): Query<TData>;
+  get<TData>(key: any): Query<TData> {
+    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key;
 
     let query = this.cache.get(stringKey);
 
@@ -26,7 +29,7 @@ export class QueryCache {
     }
 
     return query;
-  };
+  }
 
   @action
   private set = <TData>(key: string, query: Query<TData>) => {
@@ -42,7 +45,7 @@ export class QueryCache {
     }
   };
 
-  static stringifyKey = (key: any[]): string => {
+  static stringifyKey = (key: QueryKey[]): string => {
     const allowedTypes = ['string', 'number', 'boolean'];
 
     const parts = key.map((part) => {
