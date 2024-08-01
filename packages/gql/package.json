@@ -1,6 +1,6 @@
 {
   "name": "@next-inversify/gql",
-  "version": "1.0.0-alpha.20",
+  "version": "1.0.0-alpha.21",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files",
@@ -31,5 +31,6 @@
   "optionalDependencies": {
     "graphql-ws": "^5.16.0",
     "rxjs": "^7.8.1"
-  }
+  },
+  "gitHead": "b9d1fa53804ef2f44ef627eb2ddd1c670d839afb"
 }
