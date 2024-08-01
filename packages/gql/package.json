@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.19",
   "description": "",
   "scripts": {
-    "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
+    "copy:files": "ts-node ../../scripts/copy-files",
     "prepublish": "ts-node ../../scripts/copy-package-json"
   },
   "keywords": [],

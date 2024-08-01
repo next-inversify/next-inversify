@@ -47,7 +47,6 @@ export class Query<TData> implements QueryState {
       isLoading: query.isLoading,
       isLoaded: query.isLoaded,
       data: query.data,
-      error: query.error,
       staleAt: query.staleAt,
     };
   };

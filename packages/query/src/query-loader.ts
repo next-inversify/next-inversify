@@ -14,6 +14,8 @@ export type QueryLoaderParams<TData> = {
 };
 
 export class QueryLoader<TData> implements QueryState {
+  private promise?: Promise<void>;
+
   constructor(
     private readonly cache: QueryCache,
     private readonly params: QueryLoaderParams<TData>,
@@ -21,7 +23,15 @@ export class QueryLoader<TData> implements QueryState {
     makeObservable(this);
   }
 
-  fetch = async (): Promise<void> => {
+  fetch = (): Promise<void> => {
+    if (!this.promise) {
+      this.promise = this.fetcher();
+    }
+
+    return this.promise;
+  };
+
+  private fetcher = async (): Promise<void> => {
     this.setLoading(true);
 
     try {
@@ -31,6 +41,8 @@ export class QueryLoader<TData> implements QueryState {
     } catch (error) {
       this.onError(error);
     }
+
+    this.promise = undefined;
   };
 
   @computed
