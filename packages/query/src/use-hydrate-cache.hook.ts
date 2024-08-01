@@ -19,7 +19,12 @@ export const useHydrateCache = (params: UseHydrateCacheParams) => {
 
     for (const [key, data] of Object.entries(params.data || {})) {
       const query = queryCache.get(key);
-      if (data.staleAt && data.staleAt > (query.staleAt || 0)) {
+      /**
+        hydrate in case:
+          - query doesn't have a staleAt which means it wasn't loaded on the server by some reason (failed query, etc)
+          - query has a fresh staleAt
+      **/
+      if (!data.staleAt || (query.staleAt && data.staleAt > query.staleAt)) {
         hydrationData[key] = data;
       }
     }
