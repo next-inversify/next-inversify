@@ -97,7 +97,7 @@ importers:
         specifier: ^1.0.0-alpha.1
         version: link:../core
       '@next-inversify/query':
-        specifier: ^1.0.0-alpha.1
+        specifier: ^1.0.0-alpha.20
         version: 1.0.0-y.0(@types/react@18.3.1)(inversify@6.0.2)(mobx@6.12.3)(next@14.2.3)(react@18.3.1)
       graphql-request:
         specifier: ^7.0.1
