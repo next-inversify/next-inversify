@@ -39,6 +39,7 @@ export class QueryCache {
   dehydrate = (): Record<string, QueryState> =>
     Object.fromEntries(Array.from(this.cache.entries()).map(([key, query]) => [key, Query.dehydrate(query)]));
 
+  @action
   hydrate = (cache: Record<string, QueryState>) => {
     for (const [key, data] of Object.entries(cache)) {
       this.cache.set(key, new Query(data));
