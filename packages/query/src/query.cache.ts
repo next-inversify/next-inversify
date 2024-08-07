@@ -15,10 +15,9 @@ export class QueryCache {
     makeObservable(this);
   }
 
-  get<TData>(key: QueryKey): Query<TData>;
-  get<TData>(key: QueryKey[]): Query<TData>;
-  get<TData>(key: any): Query<TData> {
-    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key;
+  get<TData>(key: QueryKey | QueryKey[], alias?: QueryKey | QueryKey[]): Query<TData> {
+    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key.toString();
+    const aliasKey = Array.isArray(alias) ? QueryCache.stringifyKey(alias) : alias?.toString();
 
     let query = this.cache.get(stringKey);
 
@@ -26,6 +25,10 @@ export class QueryCache {
       query = Query.empty<TData>(stringKey);
 
       this.set(stringKey, query);
+    }
+
+    if (aliasKey) {
+      this.set(aliasKey, query);
     }
 
     return query;

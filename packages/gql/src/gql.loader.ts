@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { QueryLoader, QueryLoaderParams } from '@next-inversify/query/query-loader';
 import { QueryCache } from '@next-inversify/query/query.cache';
+import { QueryKey } from '@next-inversify/query/query.types';
 import { getOperationAST } from 'graphql';
 
 import { GqlClient } from './gql.client';
 import { ExtractResult, ExtractVariables, QueryFn } from './query-types';
 
 export type GqlQueryParams<Q extends QueryFn> = Omit<QueryLoaderParams<ExtractResult<Q>>, 'fn' | 'key'> & {
-  key?: any[];
+  key?: QueryKey | QueryKey[];
   variables?: ExtractVariables<Q>;
   headers?: HeadersInit;
 };

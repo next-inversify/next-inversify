@@ -8,6 +8,7 @@ import { QueryKey } from './query.types';
 
 export type QueryLoaderParams<TData> = {
   key: QueryKey | QueryKey[];
+  alias?: QueryKey | QueryKey[];
   fn: () => Promise<TData>;
   staleMs?: number;
   onSuccess?: (data: TData) => void;
@@ -48,7 +49,7 @@ export class QueryLoader<TData> implements QueryState {
 
   @computed
   private get state(): Query<TData> {
-    return this.cache.get<TData>(this.params.key);
+    return this.cache.get<TData>(this.params.key, this.params.alias);
   }
 
   @computed
