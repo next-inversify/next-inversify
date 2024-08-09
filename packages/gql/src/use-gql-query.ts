@@ -24,26 +24,28 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params?: UseGqlQueryParams
 export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<Q> = {}) {
   const { suspense = true, lazy = false, ...rest } = params;
 
-  const mountedRef = useRef(false);
+  const variablesKeyRef = useRef<string | boolean>();
 
   const gqlClient = useService(GqlClient);
   const queryCache = useService(QueryCache);
 
-  const [loader, setLoader] = useState(() => createQueryLoader(fn, rest, queryCache, gqlClient));
+  const [loader, setLoader] = useState(() => {
+    variablesKeyRef.current = params.variables && QueryCache.stringifyKey([params.variables]);
 
-  const variableKey = params.variables && QueryCache.stringifyKey([params.variables]);
+    return createQueryLoader(fn, rest, queryCache, gqlClient);
+  });
+
+  const variablesKey = params.variables && QueryCache.stringifyKey([params.variables]);
 
   useEffect(() => {
-    if (!mountedRef.current) {
-      mountedRef.current = true;
+    if (variablesKeyRef.current !== variablesKey) {
+      variablesKeyRef.current = variablesKey;
 
-      return;
+      const loader = createQueryLoader(fn, rest, queryCache, gqlClient);
+      setLoader(loader);
+      loader.fetch();
     }
-
-    const loader = createQueryLoader(fn, rest, queryCache, gqlClient);
-    setLoader(loader);
-    loader.fetch();
-  }, [variableKey]);
+  }, [variablesKey]);
 
   return useBaseQuery(loader, { suspense, lazy });
 }
