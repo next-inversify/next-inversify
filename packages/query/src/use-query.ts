@@ -1,5 +1,5 @@
 import { useService } from '@next-inversify/core/context';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { QueryLoader, QueryLoaderParams } from './query-loader';
 import { QueryCache } from './query.cache';
@@ -15,9 +15,27 @@ export function useQuery<TData>(params: UseQueryParams<TData>): CompletedQuery<T
 export function useQuery<TData>(params: UseQueryParams<TData>) {
   const { suspense, lazy, ...rest } = params;
 
+  const keyRef = useRef<string | boolean>();
+
   const queryCache = useService(QueryCache);
 
-  const [loader] = useState(() => new QueryLoader(queryCache, rest));
+  const [loader, setLoader] = useState(() => {
+    keyRef.current = QueryCache.stringifyKey(Array.isArray(rest.key) ? rest.key : [rest.key]);
+
+    return new QueryLoader(queryCache, rest);
+  });
+
+  const key = QueryCache.stringifyKey(Array.isArray(rest.key) ? rest.key : [rest.key]);
+
+  useEffect(() => {
+    if (keyRef.current !== key) {
+      keyRef.current = key;
+
+      const loader = new QueryLoader(queryCache, rest);
+      setLoader(loader);
+      loader.fetch();
+    }
+  }, [key]);
 
   return useBaseQuery(loader, { suspense, lazy });
 }
