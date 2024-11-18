@@ -1,6 +1,6 @@
 {
   "name": "react-inversify",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.30",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files",

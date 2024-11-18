@@ -1,6 +1,6 @@
 {
   "name": "@next-inversify/core",
-  "version": "1.0.0-alpha.21",
+  "version": "1.0.0-alpha.30",
   "description": "",
   "scripts": {
     "copy:files": "ts-node ../../scripts/copy-files && fse copy ./src/with-reflect.mjs ./build/with-reflect.mjs",
