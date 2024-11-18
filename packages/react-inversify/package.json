@@ -1,0 +1,27 @@
+{
+  "name": "react-inversify",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "copy:files": "ts-node ../../scripts/copy-files",
+    "prepublish": "ts-node ../../scripts/copy-package-json"
+  },
+  "keywords": [],
+  "author": "alexhtech <olefirenk@gmail.com>",
+  "license": "MIT",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "devDependencies": {
+    "@types/react": "^18",
+    "inversify": "^6.0.2",
+    "react": "^18"
+  },
+  "peerDependencies": {
+    "@types/react": "^18",
+    "inversify": "^6.0.2",
+    "react": "^18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
