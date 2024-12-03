@@ -37,5 +37,5 @@ export function useQuery<TData>(params: UseQueryParams<TData>) {
     }
   }, [key]);
 
-  return useBaseQuery(loader, { suspense, lazy });
+  return useBaseQuery(loader, queryCache, { suspense, lazy });
 }

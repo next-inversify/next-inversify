@@ -1,5 +1,7 @@
 'use client';
 
+import { useService } from '@next-inversify/core/src/context';
+import { QueryCache } from '@next-inversify/query/query.cache';
 import { useQuery } from '@next-inversify/query/use-query';
 import { observer } from 'mobx-react-lite';
 import { Suspense } from 'react';
@@ -8,6 +10,8 @@ import { EmbededQuery } from './embeded';
 import { EmbededLazyQuery } from './lazy-query';
 
 export default observer(function QueryPage() {
+  const queryCache = useService(QueryCache);
+
   const catsFactQuery = useQuery({
     key: ['fact'],
     fn: async () => {
@@ -37,6 +41,12 @@ export default observer(function QueryPage() {
             onClick={() => catsFactQuery.fetch()}
           >
             refetch
+          </button>
+          <button
+            className="rounded-md bg-sky-600 py-1 px-3 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700"
+            onClick={() => queryCache.refetchQueries('fact')}
+          >
+            refetch with signal
           </button>
         </div>
         <div className="text-sm">{catsFactQuery.data.fact}</div>

@@ -47,5 +47,5 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<
     }
   }, [variablesKey]);
 
-  return useBaseQuery(loader, { suspense, lazy });
+  return useBaseQuery(loader, queryCache, { suspense, lazy });
 }

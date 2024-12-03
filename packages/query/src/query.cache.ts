@@ -3,16 +3,23 @@ import { injectable } from 'inversify';
 import { action, makeObservable, observable } from 'mobx';
 
 import { Query } from './query';
+import { SignalObservable, createSignal } from './query.signal';
 import { QueryState } from './query.state';
 import { QueryKey } from './query.types';
 
 @injectable()
 export class QueryCache {
+  private signal$$ = createSignal<QueryCacheSignal>();
+
+  readonly signal$: SignalObservable<QueryCacheSignal>;
+
   @observable.shallow
   private cache = new Map<string, Query<any>>();
 
   constructor() {
     makeObservable(this);
+
+    this.signal$ = this.signal$$.asObservable();
   }
 
   get<TData>(key: QueryKey | QueryKey[], alias?: QueryKey | QueryKey[]): Query<TData> {
@@ -34,16 +41,22 @@ export class QueryCache {
     return query;
   }
 
+  readonly refetchQueries = (key: QueryKey | QueryKey[]) => {
+    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key.toString();
+
+    this.signal$$.next({ kind: 'refetchQueries', key: stringKey });
+  };
+
   @action
   private set = <TData>(key: string, query: Query<TData>) => {
     this.cache.set(key, query);
   };
 
-  dehydrate = (): Record<string, QueryState> =>
+  readonly dehydrate = (): Record<string, QueryState> =>
     Object.fromEntries(Array.from(this.cache.entries()).map(([key, query]) => [key, Query.dehydrate(query)]));
 
   @action
-  hydrate = (cache: Record<string, QueryState>) => {
+  readonly hydrate = (cache: Record<string, QueryState>) => {
     for (const [key, data] of Object.entries(cache)) {
       this.cache.set(key, new Query(data));
     }
@@ -63,3 +76,8 @@ export class QueryCache {
     return parts.join(':');
   };
 }
+
+export type QueryCacheSignal = {
+  kind: 'refetchQueries';
+  key: string;
+};

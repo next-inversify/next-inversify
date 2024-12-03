@@ -1,4 +1,4 @@
-import { withReflect } from '@next-inversify/core/src/with-reflect.mjs';
+import { withReflect } from '@next-inversify/core/with-reflect.mjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
