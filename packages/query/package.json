@@ -12,18 +12,18 @@
   "main": "./index.js",
   "typings": "./index.d.ts",
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "inversify": "^6.0.2",
-    "mobx": "^6.12.3",
-    "next": "^14.2.3",
-    "react": "^18.3.1"
+    "@types/react": "^19",
+    "inversify": "^6.2.1",
+    "mobx": "^6.13.5",
+    "next": "^15.1.3",
+    "react": "^19"
   },
   "peerDependencies": {
-    "@types/react": "^18",
+    "@types/react": "^18 || ^19",
     "inversify": "^6",
     "mobx": "^6",
-    "next": "^14",
-    "react": "^18"
+    "next": "^14 || ^15",
+    "react": "^18 || ^19"
   },
   "publishConfig": {
     "access": "public"

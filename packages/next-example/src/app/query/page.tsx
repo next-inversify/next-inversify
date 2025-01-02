@@ -1,6 +1,6 @@
 'use client';
 
-import { useService } from '@next-inversify/core/src/context';
+import { useService } from '@next-inversify/core/context';
 import { QueryCache } from '@next-inversify/query/query.cache';
 import { useQuery } from '@next-inversify/query/use-query';
 import { observer } from 'mobx-react-lite';

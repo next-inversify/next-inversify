@@ -1,19 +1,21 @@
 'use client';
 
 import { GetCapsule, GetCapsuleQuery } from '@/core/api/get-capsule.gql.generated';
-import { useService } from '@next-inversify/core/src/context';
+import { useService } from '@next-inversify/core/context';
 import { useGqlQuery } from '@next-inversify/gql/use-gql-query';
 import { QueryCache } from '@next-inversify/query/query.cache';
 import { observer } from 'mobx-react-lite';
+import { use } from 'react';
 
 type CapsulePageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default observer(function Page(props: CapsulePageProps) {
-  useGqlQuery(GetCapsule, { variables: { id: props.params.id }, alias: ['capsule'] });
+  const params = use(props.params);
+  useGqlQuery(GetCapsule, { variables: { id: params.id }, alias: ['capsule'] });
 
   const queryCache = useService(QueryCache);
 

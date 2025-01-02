@@ -1,8 +1,8 @@
-import { withReflect } from '@next-inversify/core/with-reflect.mjs';
+import { withReflect } from '@next-inversify/core/src/with-reflect.mjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   webpack: (config) => withReflect(config),
 };
 

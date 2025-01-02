@@ -15,7 +15,7 @@ export function useQuery<TData>(params: UseQueryParams<TData>): CompletedQuery<T
 export function useQuery<TData>(params: UseQueryParams<TData>) {
   const { suspense, lazy, ...rest } = params;
 
-  const keyRef = useRef<string | boolean>();
+  const keyRef = useRef<string | boolean>('');
 
   const queryCache = useService(QueryCache);
 

@@ -12,14 +12,14 @@
   "main": "./index.js",
   "typings": "./index.d.ts",
   "devDependencies": {
-    "@types/react": "^18",
-    "inversify": "^6.0.2",
-    "react": "^18"
+    "@types/react": "^19",
+    "inversify": "^6.2.1",
+    "react": "^19"
   },
   "peerDependencies": {
-    "@types/react": "^18",
-    "inversify": "^6.0.2",
-    "react": "^18"
+    "@types/react": "^18 || ^19",
+    "inversify": "^6",
+    "react": "^18 || ^19"
   },
   "publishConfig": {
     "access": "public"

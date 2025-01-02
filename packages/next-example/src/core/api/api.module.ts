@@ -1,4 +1,4 @@
-import { createIOC } from '@next-inversify/core/src';
+import { createIOC } from '@next-inversify/core';
 import { GqlClient } from '@next-inversify/gql/gql.client';
 import { ContainerModule } from 'inversify';
 
