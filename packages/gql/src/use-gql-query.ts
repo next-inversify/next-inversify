@@ -24,7 +24,7 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params?: UseGqlQueryParams
 export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<Q> = {}) {
   const { suspense = true, lazy = false, ...rest } = params;
 
-  const variablesKeyRef = useRef<string | boolean>();
+  const variablesKeyRef = useRef<string | boolean | undefined>(undefined);
 
   const gqlClient = useService(GqlClient);
   const queryCache = useService(QueryCache);
