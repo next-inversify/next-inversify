@@ -1,19 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { QueryLoader, QueryLoaderParams } from '@next-inversify/query/query-loader';
-import { QueryCache } from '@next-inversify/query/query.cache';
+import { QueryParams } from '@next-inversify/query/query';
 import { QueryKey } from '@next-inversify/query/query.types';
-import { getOperationAST } from 'graphql';
+import { DocumentNode, getOperationAST } from 'graphql';
 
 import { GqlClient } from './gql.client';
 import { ExtractResult, ExtractVariables, QueryFn } from './query-types';
 
-export type GqlQueryParams<Q extends QueryFn> = Omit<QueryLoaderParams<ExtractResult<Q>>, 'fn' | 'key'> & {
+export type GqlQueryParams<Q extends QueryFn> = Omit<QueryParams<ExtractResult<Q>>, 'fn' | 'key'> & {
   key?: QueryKey | QueryKey[];
   variables?: ExtractVariables<Q>;
   headers?: HeadersInit;
 };
 
-export const getKey = <Q extends QueryFn>(queryFn: Q, params: GqlQueryParams<Q> | undefined): any[] => {
+export const getKey = <Q extends QueryFn>(queryFn: Q, params: GqlQueryParams<Q> | undefined): QueryKey | QueryKey[] => {
+  const [key] = extractFn(queryFn, params);
+
+  return key;
+};
+
+export const extractFn = <Q extends QueryFn>(
+  queryFn: Q,
+  params: GqlQueryParams<Q> | undefined,
+): [key: QueryKey | QueryKey[], document: DocumentNode] => {
   const { key, variables } = params || {};
 
   return queryFn((document) => {
@@ -23,33 +31,22 @@ export const getKey = <Q extends QueryFn>(queryFn: Q, params: GqlQueryParams<Q> 
       throw new Error('Query must have a name');
     }
 
-    return key || [name, variables];
+    return [key || [name, variables], document];
   }, variables);
 };
 
-export const createQueryLoader = <Q extends QueryFn>(
+export const getParams = <Q extends QueryFn>(
   queryFn: Q,
   params: GqlQueryParams<Q> | undefined,
-  queryCache: QueryCache,
   gqlClient: GqlClient,
-): QueryLoader<ExtractResult<Q>> => {
-  const { key, variables, headers, ...restParams } = params || {};
+): QueryParams<ExtractResult<Q>> => {
+  const { key: keyOverride, variables, headers, ...restParams } = params || {};
 
-  return queryFn(
-    (document, ...rest) => {
-      const name = getOperationAST(document)?.name?.value;
+  const [key, document] = extractFn(queryFn, params);
 
-      if (!name) {
-        throw new Error('Query must have a name');
-      }
-
-      return new QueryLoader(queryCache, {
-        key: key || getKey(queryFn, params),
-        fn: () => gqlClient.query(document, ...rest) as Promise<ExtractResult<Q>>,
-        ...restParams,
-      });
-    },
-    variables,
-    headers,
-  );
+  return {
+    key: keyOverride || key,
+    fn: () => gqlClient.query(document, variables, headers) as Promise<ExtractResult<Q>>,
+    ...restParams,
+  };
 };

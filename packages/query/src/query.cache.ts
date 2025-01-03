@@ -2,7 +2,7 @@
 import { injectable } from 'inversify';
 import { action, makeObservable, observable } from 'mobx';
 
-import { Query } from './query';
+import { Query, QueryParams } from './query';
 import { SignalObservable, createSignal } from './query.signal';
 import { QueryState } from './query.state';
 import { QueryKey } from './query.types';
@@ -23,8 +23,7 @@ export class QueryCache {
   }
 
   get<TData>(key: QueryKey | QueryKey[], alias?: QueryKey | QueryKey[]): Query<TData> {
-    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key.toString();
-    const aliasKey = Array.isArray(alias) ? QueryCache.stringifyKey(alias) : alias?.toString();
+    const stringKey = Query.stringifyKey(key);
 
     let query = this.cache.get(stringKey);
 
@@ -34,15 +33,33 @@ export class QueryCache {
       this.set(stringKey, query);
     }
 
-    if (aliasKey) {
-      this.set(aliasKey, query);
+    if (typeof alias !== 'undefined') {
+      this.set(Query.stringifyKey(alias), query);
     }
 
     return query;
   }
 
+  readonly buildQuery = <TData>(params: QueryParams<TData>) => {
+    const key = Query.stringifyKey(params.key);
+
+    let query = this.cache.get(key);
+
+    if (!query) {
+      query = Query.create<TData>(params);
+
+      this.set(key, query);
+    }
+
+    if (typeof params.alias !== 'undefined') {
+      this.set(Query.stringifyKey(params.alias), query);
+    }
+
+    return query;
+  };
+
   readonly refetchQueries = (key: QueryKey | QueryKey[]) => {
-    const stringKey = Array.isArray(key) ? QueryCache.stringifyKey(key) : key.toString();
+    const stringKey = Array.isArray(key) ? Query.stringifyKey(key) : key.toString();
 
     this.signal$$.next({ kind: 'refetchQueries', key: stringKey });
   };
@@ -60,20 +77,6 @@ export class QueryCache {
     for (const [key, data] of Object.entries(cache)) {
       this.cache.set(key, new Query(data));
     }
-  };
-
-  static stringifyKey = (key: QueryKey[]): string => {
-    const allowedTypes = ['string', 'number', 'boolean'];
-
-    const parts = key.map((part) => {
-      if (allowedTypes.includes(typeof part)) {
-        return part;
-      }
-
-      return JSON.stringify(part);
-    });
-
-    return parts.join(':');
   };
 }
 

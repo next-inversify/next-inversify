@@ -1,41 +1,33 @@
 import { useService } from '@next-inversify/core/context';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { QueryLoader, QueryLoaderParams } from './query-loader';
+import { Query, QueryParams } from './query';
 import { QueryCache } from './query.cache';
 import { CompletedQuery } from './query.types';
 import { UseBaseQueryParams, useBaseQuery } from './use-base-query';
 
-export type UseQueryParams<TData> = UseBaseQueryParams & QueryLoaderParams<TData>;
+export type UseQueryParams<TData> = UseBaseQueryParams & QueryParams<TData>;
 
-export function useQuery<TData>(params: UseQueryParams<TData> & { suspense: false }): QueryLoader<TData>;
-export function useQuery<TData>(params: UseQueryParams<TData> & { lazy: true }): QueryLoader<TData>;
+export function useQuery<TData>(params: UseQueryParams<TData> & { suspense: false }): Query<TData>;
+export function useQuery<TData>(params: UseQueryParams<TData> & { lazy: true }): Query<TData>;
 export function useQuery<TData>(params: UseQueryParams<TData>): CompletedQuery<TData>;
 
 export function useQuery<TData>(params: UseQueryParams<TData>) {
   const { suspense, lazy, ...rest } = params;
 
-  const keyRef = useRef<string | boolean>('');
-
   const queryCache = useService(QueryCache);
 
-  const [loader, setLoader] = useState(() => {
-    keyRef.current = QueryCache.stringifyKey(Array.isArray(rest.key) ? rest.key : [rest.key]);
-
-    return new QueryLoader(queryCache, rest);
-  });
-
-  const key = QueryCache.stringifyKey(Array.isArray(rest.key) ? rest.key : [rest.key]);
+  const [query, setQuery] = useState(() => queryCache.buildQuery(rest));
 
   useEffect(() => {
-    if (keyRef.current !== key) {
-      keyRef.current = key;
+    const newQuery = queryCache.buildQuery(rest);
 
-      const loader = new QueryLoader(queryCache, rest);
-      setLoader(loader);
-      loader.fetch();
+    if (newQuery !== query) {
+      setQuery(newQuery);
+    } else {
+      query.setParams(rest);
     }
-  }, [key]);
+  }, [params]);
 
-  return useBaseQuery(loader, queryCache, { suspense, lazy });
+  return useBaseQuery(query, queryCache, { suspense, lazy });
 }

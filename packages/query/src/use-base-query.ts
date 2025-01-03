@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { QueryLoader } from './query-loader';
+import { Query } from './query';
 import { QueryCache } from './query.cache';
 import { CompletedQuery } from './query.types';
 
@@ -14,40 +14,40 @@ export type UseBaseQueryLazyParams = Omit<UseBaseQueryParams, 'lazy'> & {
 };
 
 export function useBaseQuery<TData>(
-  queryLoader: QueryLoader<TData>,
+  query: Query<TData>,
   queryCache: QueryCache,
   params: UseBaseQueryParams,
-): QueryLoader<TData> | CompletedQuery<TData> {
+): Query<TData> | CompletedQuery<TData> {
   const { suspense = true, lazy = false } = params;
 
   if (suspense && !lazy) {
-    if (queryLoader.error) {
-      throw queryLoader.error;
+    if (query.error) {
+      throw query.error;
     }
 
-    if (!queryLoader.isLoaded) {
-      throw queryLoader.fetch();
+    if (!query.isLoaded || query.isLoading) {
+      throw query.fetch();
     }
   }
 
   useEffect(() => {
-    if (!lazy && queryLoader.staleAt && queryLoader.staleAt < Date.now()) {
-      queryLoader.fetch();
+    if (!lazy && query.staleAt && query.staleAt < Date.now()) {
+      query.fetch();
     }
 
     if (!suspense && !lazy) {
-      queryLoader.fetch();
+      query.fetch();
     }
 
     return queryCache.signal$.subscribe((signal) => {
       switch (signal.kind) {
         case 'refetchQueries':
-          if (queryLoader.key.includes(signal.key)) {
-            queryLoader.fetch();
+          if (query.key.includes(signal.key)) {
+            query.fetch();
           }
       }
     });
-  }, [queryLoader.key]);
+  }, [query.key]);
 
-  return queryLoader;
+  return query;
 }

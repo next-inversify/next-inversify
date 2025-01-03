@@ -4,16 +4,18 @@ import { useService } from '@next-inversify/core/context';
 import { QueryCache } from '@next-inversify/query/query.cache';
 import { useQuery } from '@next-inversify/query/use-query';
 import { observer } from 'mobx-react-lite';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 
 import { EmbededQuery } from './embeded';
 import { EmbededLazyQuery } from './lazy-query';
 
 export default observer(function QueryPage() {
   const queryCache = useService(QueryCache);
+  const [counter, setCounter] = useState(0);
 
   const catsFactQuery = useQuery({
-    key: ['fact'],
+    key: ['fact', counter],
+    staleMs: 60000,
     fn: async () => {
       const result = await fetch('https://catfact.ninja/fact').catch((error) => ({
         ok: false,
@@ -27,7 +29,7 @@ export default observer(function QueryPage() {
       return json;
     },
     onSuccess: (data) => {
-      console.log('onFetchSuccess', data);
+      console.log('onFetchSuccess page', data);
     },
   });
 
@@ -42,6 +44,10 @@ export default observer(function QueryPage() {
           >
             refetch
           </button>
+
+          <button onClick={() => setCounter((prev) => prev + 1)}>increment</button>
+          <button onClick={() => setCounter((prev) => prev - 1)}>decrement</button>
+
           <button
             className="rounded-md bg-sky-600 py-1 px-3 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700"
             onClick={() => queryCache.refetchQueries('fact')}
