@@ -118,7 +118,6 @@ export class Query<TData> implements QueryState {
 
   @action
   private setLoading = (isLoading: boolean) => {
-    console.log('setLoading', isLoading);
     this.isLoading = isLoading;
   };
 
