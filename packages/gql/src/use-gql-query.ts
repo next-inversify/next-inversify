@@ -3,7 +3,6 @@ import { Query } from '@next-inversify/query/query';
 import { QueryCache } from '@next-inversify/query/query.cache';
 import { CompletedQuery } from '@next-inversify/query/query.types';
 import { UseBaseQueryParams, useBaseQuery } from '@next-inversify/query/use-base-query';
-import { useEffect, useState } from 'react';
 
 import { GqlClient } from './gql.client';
 import { GqlQueryParams, getParams } from './gql.loader';
@@ -27,19 +26,10 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<
   const queryCache = useService(QueryCache);
   const gqlClient = useService(GqlClient);
 
-  const [query, setQuery] = useState(() => queryCache.buildQuery(getParams(fn, rest, gqlClient)));
+  const queryParams = getParams(fn, rest, gqlClient);
+  const query = queryCache.buildQuery(queryParams);
 
-  useEffect(() => {
-    const params = getParams(fn, rest, gqlClient);
-
-    const newQuery = queryCache.buildQuery(params);
-
-    if (newQuery !== query) {
-      setQuery(newQuery);
-    } else {
-      query.setParams(params);
-    }
-  }, [params]);
+  query.setParams(queryParams);
 
   return useBaseQuery(query, queryCache, { suspense, lazy });
 }

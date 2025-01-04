@@ -1,5 +1,4 @@
 import { useService } from '@next-inversify/core/context';
-import { useEffect, useState } from 'react';
 
 import { Query, QueryParams } from './query';
 import { QueryCache } from './query.cache';
@@ -17,17 +16,9 @@ export function useQuery<TData>(params: UseQueryParams<TData>) {
 
   const queryCache = useService(QueryCache);
 
-  const [query, setQuery] = useState(() => queryCache.buildQuery(rest));
+  const query = queryCache.buildQuery(rest);
 
-  useEffect(() => {
-    const newQuery = queryCache.buildQuery(rest);
-
-    if (newQuery !== query) {
-      setQuery(newQuery);
-    } else {
-      query.setParams(rest);
-    }
-  }, [params]);
+  query.setParams(rest);
 
   return useBaseQuery(query, queryCache, { suspense, lazy });
 }
