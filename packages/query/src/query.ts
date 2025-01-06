@@ -95,6 +95,15 @@ export class Query<TData> implements QueryState {
   };
 
   @action
+  readonly reset = () => {
+    this.data = undefined;
+    this.isLoaded = false;
+    this.isLoading = false;
+    this.error = undefined;
+    this.staleAt = undefined;
+  };
+
+  @action
   private onSuccess = (data: TData) => {
     if (!this.params) throw new NoQueryParams();
 
