@@ -25,13 +25,13 @@ export class QueryCache {
   get<TData>(key: QueryKey | QueryKey[], alias?: QueryKey | QueryKey[]): Query<TData> {
     const stringKey = Query.stringifyKey(key);
 
-    let query = this.cache.get(stringKey);
+    const hasQuery = this.cache.has(stringKey);
 
-    if (!query) {
-      query = Query.empty<TData>(stringKey);
-
-      this.set(stringKey, query);
+    if (!hasQuery) {
+      this.set(stringKey, Query.empty<TData>(stringKey));
     }
+
+    const query = this.cache.get(stringKey)!;
 
     if (typeof alias !== 'undefined') {
       this.set(Query.stringifyKey(alias), query);
@@ -43,13 +43,13 @@ export class QueryCache {
   readonly buildQuery = <TData>(params: QueryParams<TData>) => {
     const key = Query.stringifyKey(params.key);
 
-    let query = this.cache.get(key);
+    const hasQuery = this.cache.has(key);
 
-    if (!query) {
-      query = Query.create<TData>(params);
-
-      this.set(key, query);
+    if (!hasQuery) {
+      this.set(key, Query.create<TData>(params));
     }
+
+    const query = this.cache.get(key)!;
 
     if (typeof params.alias !== 'undefined') {
       this.set(Query.stringifyKey(params.alias), query);
