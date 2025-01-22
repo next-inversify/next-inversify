@@ -3,23 +3,16 @@ import { injectable } from 'inversify';
 import { action, makeObservable, observable } from 'mobx';
 
 import { Query, QueryParams } from './query';
-import { SignalObservable, createSignal } from './query.signal';
 import { QueryState } from './query.state';
 import { QueryKey } from './query.types';
 
 @injectable()
 export class QueryCache {
-  private signal$$ = createSignal<QueryCacheSignal>();
-
-  readonly signal$: SignalObservable<QueryCacheSignal>;
-
   @observable.shallow
   private cache = new Map<string, Query<any>>();
 
   constructor() {
     makeObservable(this);
-
-    this.signal$ = this.signal$$.asObservable();
   }
 
   get<TData>(key: QueryKey | QueryKey[], alias?: QueryKey | QueryKey[]): Query<TData> {
@@ -61,7 +54,13 @@ export class QueryCache {
   readonly refetchQueries = (key: QueryKey | QueryKey[]) => {
     const stringKey = Array.isArray(key) ? Query.stringifyKey(key) : key.toString();
 
-    this.signal$$.next({ kind: 'refetchQueries', key: stringKey });
+    const queries = Array.from(this.cache.values());
+
+    queries.forEach((query) => {
+      if (query.key.includes(stringKey) && query.hasParams) {
+        query.fetch();
+      }
+    });
   };
 
   @action
@@ -79,8 +78,3 @@ export class QueryCache {
     }
   };
 }
-
-export type QueryCacheSignal = {
-  kind: 'refetchQueries';
-  key: string;
-};

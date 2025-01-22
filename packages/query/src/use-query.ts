@@ -20,5 +20,5 @@ export function useQuery<TData>(params: UseQueryParams<TData>) {
 
   query.setParams(rest);
 
-  return useBaseQuery(query, queryCache, { suspense, lazy });
+  return useBaseQuery(query, { suspense, lazy });
 }

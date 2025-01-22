@@ -88,6 +88,10 @@ export class Query<TData> implements QueryState {
     this.promise = undefined;
   };
 
+  get hasParams(): boolean {
+    return !!this.params;
+  }
+
   @action
   readonly update = (data: TData) => {
     this.data = data;

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import { Query } from './query';
-import { QueryCache } from './query.cache';
 import { CompletedQuery } from './query.types';
 
 export type UseBaseQueryParams = {
@@ -15,7 +14,6 @@ export type UseBaseQueryLazyParams = Omit<UseBaseQueryParams, 'lazy'> & {
 
 export function useBaseQuery<TData>(
   query: Query<TData>,
-  queryCache: QueryCache,
   params: UseBaseQueryParams,
 ): Query<TData> | CompletedQuery<TData> {
   const { suspense = true, lazy = false } = params;
@@ -38,15 +36,6 @@ export function useBaseQuery<TData>(
     if (!suspense && !lazy) {
       query.fetch();
     }
-
-    return queryCache.signal$.subscribe((signal) => {
-      switch (signal.kind) {
-        case 'refetchQueries':
-          if (query.key.includes(signal.key)) {
-            query.fetch();
-          }
-      }
-    });
   }, [query.key]);
 
   return query;

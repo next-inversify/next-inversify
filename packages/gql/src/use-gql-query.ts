@@ -31,5 +31,5 @@ export function useGqlQuery<Q extends QueryFn>(fn: Q, params: UseGqlQueryParams<
 
   query.setParams(queryParams);
 
-  return useBaseQuery(query, queryCache, { suspense, lazy });
+  return useBaseQuery(query, { suspense, lazy });
 }
