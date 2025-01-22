@@ -51,13 +51,11 @@ export class QueryCache {
     return query;
   };
 
-  readonly refetchQueries = (key: QueryKey | QueryKey[]) => {
-    const stringKey = Array.isArray(key) ? Query.stringifyKey(key) : key.toString();
-
+  readonly refetchQueries = (key: string | string[]) => {
     const queries = Array.from(this.cache.values());
 
     queries.forEach((query) => {
-      if (query.key.includes(stringKey) && query.hasParams) {
+      if (Array.isArray(key) ? key.some((k) => query.key.includes(k)) : query.key.includes(key)) {
         query.fetch();
       }
     });
